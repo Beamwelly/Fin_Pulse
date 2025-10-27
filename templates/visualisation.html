@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sector Sentiment News Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #111;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #1d4ed8; /* blue-700 */
+            background-color: #007bff; /* blue */
+            color: #ffffff;
+            outline: none;
+            margin: 0 10px;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+        }
+
+        select:hover {
+            background-color: #1d6fe2; /* slightly darker */
+            border-color: #1556cf;
+        }
+
+        select:focus {
+            background-color: #1d6fe2;
+            border-color: #1556cf;
+            box-shadow: 0 0 0 4px rgba(29, 111, 226, 0.15);
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 1400px;
+            height: 600px;
+            margin: 20px auto;
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100%;
+            border-radius: 10px;
+            background-color: white;
+            padding: 10px;
+            display: block;
+            margin: auto;
+            cursor: pointer;
+        }
+
+        .back-home {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background-color: #007bff; /* blue */
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-home:hover {
+            background-color: #0056b3; /* darker blue */
+        }
+
+        .back-home i {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sector News Sentiment Visualization</h1>
+
+    <form method="get" action="/Visualisation">
+        <label for="sector">Select Sector:</label>
+        <select name="sector" id="sector">
+            {% for sector in sectors %}
+                <option value="{{ sector }}" {% if sector == selected_sector %}selected{% endif %}>{{ sector }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="days">Days:</label>
+        <select name="days" id="days" onchange="this.form.submit()">
+            <option value="1" {% if selected_days == '1' %}selected{% endif %}>1 Day</option>
+            <option value="3" {% if selected_days == '3' %}selected{% endif %}>3 Days</option>
+            <option value="7" {% if selected_days == '7' %}selected{% endif %}>7 Days</option>
+            <option value="15" {% if selected_days == '15' %}selected{% endif %}>15 Days</option>
+            <option value="30" {% if selected_days == '30' %}selected{% endif %}>30 Days</option>
+        </select>
+    </form>
+
+    <div class="chart-container">
+        <canvas id="newsSentimentChart"></canvas>
+    </div>
+
+    <a href="/" class="back-home">
+        <i class="fas fa-home"></i> Home
+    </a>
+
+    <script>
+        const ctx = document.getElementById('newsSentimentChart');
+        const newsTitles = {{ article_titles | tojson }};
+        const sentiments = {{ article_sentiments | tojson }};
+        const newsUrls = {{ article_urls | tojson }};
+
+        const backgroundColors = sentiments.map(score => {
+            if (score > 0.05) return 'rgba(0, 200, 0, 0.7)';
+            if (score < -0.05) return 'rgba(255, 0, 0, 0.7)';
+            return 'rgba(128, 128, 128, 0.7)';
+        });
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: newsTitles,
+                datasets: [{
+                    label: 'Sentiment Polarity',
+                    data: sentiments,
+                    backgroundColor: backgroundColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'x',
+                responsive: true,
+                interaction: {
+                    mode: 'nearest',
+                    intersect: false
+                },
+                onClick: (event, elements, chart) => {
+                    if (!elements || elements.length === 0) return;
+                    const first = elements[0];
+                    const index = first.index;
+                    const fullTitle = chart.data.labels[index];
+                    const newsUrl = newsUrls[index];
+                    
+                    if (newsUrl) {
+                        // Open news in new tab
+                        window.open(newsUrl, '_blank');
+                    } else {
+                        // Fallback: show title in alert
+                        alert(fullTitle);
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMin: -1,
+                        suggestedMax: 1,
+                        title: {
+                            display: true,
+                            text: 'Sentiment Polarity'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'News Titles (Click to open)'
+                        },
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 45,
+                            maxTicksLimit: 10,
+                            font: {
+                                size: 10
+                            },
+                            callback: function(value, index, values) {
+                                const title = this.getLabelForValue(value);
+                                // Truncate long titles and add ellipsis
+                                return title.length > 50 ? title.substring(0, 50) + '...' : title;
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        displayColors: false,
+                        callbacks: {
+                            title: function(items) {
+                                // Show the complete news title in the tooltip title
+                                return items && items.length ? items[0].label : '';
+                            },
+                            label: function(context) {
+                                return `Polarity: ${context.raw}`;
+                            },
+                            afterLabel: function(context) {
+                                const index = context.dataIndex;
+                                const url = newsUrls[index];
+                                return url ? 'Click to open full article' : '';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+/* Common body styles for all pages */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+/* Stocks page body background */
+.stocks-page {
+    /* background-image removed */
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Styled dropdown for stocks page */
+.stocks-page .styled-select {
+    width: 360px;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1e293b;
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.stocks-page .styled-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 8px 20px rgba(0,0,0,0.12);
+    transform: translateY(-1px);
+}
+
+.stocks-page label[for="ticker"],
+.stocks-page label[for="months"] {
+    display: inline-block;
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #1e293b;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Submit button styling on stocks page */
+.stocks-page input[type="submit"] {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stocks-page input[type="submit"]:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 8px 25px rgba(29, 78, 216, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+}
+
+.stocks-page input[type="submit"]:active {
+    transform: translateY(1px);
+}
+
+/* News page body background */
+.news-page {
+    background-image: url('/static/images/new.jpg');
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Home page body background */
+.home-page {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #1e40af 50%, #3b82f6 75%, #60a5fa 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add animated background elements */
+.home-page::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: float 20s infinite linear;
+    z-index: 1;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(-50px, -50px) rotate(360deg); }
+}
+
+/* Home page title styling */
+.home-page h1.title {
+    font-size: 4.5em;
+    margin-bottom: 30px;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.3);
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 2;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { 
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.3);
+        filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+    }
+    to { 
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.5);
+        filter: drop-shadow(0 0 20px rgba(255,255,255,0.4));
+    }
+}
+
+/* Container ONLY for stocks page */
+.container {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    color: #1e293b;
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 1400px;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.8);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Stocks page content styles inside container */
+.stocks-page .container h1 {
+    margin-bottom: 40px;
+    font-size: 2.8em;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: center;
+    background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.stocks-page .container form, 
+.stocks-page .container .chart {
+    margin-bottom: 40px;
+}
+
+/* Nav styling for home page */
+.home-page .nav-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+.home-page .nav-vertical a {
+    font-size: 1.8em;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 15px 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.home-page .nav-vertical a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.home-page .nav-vertical a:hover::before {
+    left: 100%;
+}
+
+.home-page .nav-vertical a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    border-color: rgba(255, 255, 255, 0.6);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.5);
+    color: #ffffff;
+}
+
+/* Description on home page */
+.home-page .description {
+    font-size: 1.4em;
+    color: #ffffff;
+    max-width: 700px;
+    padding: 30px 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.3);
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out;
+    font-weight: 500;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Top-right home link for stocks page */
+.top-right {
+    position: absolute;
+    top: 50px;
+    right: 60px;
+    z-index: 1000;
+}
+
+.top-right a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 18px;
+    background-color: #3b82f6;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.top-right a:hover {
+    background-color: #1d4ed8;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
+}
+
+/* Chart container styling */
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    height: 700px;  /* Controls height of container */
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+/* Force chart to fill container */
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    border-radius: 10px;
+    background-color: white;
+    padding: 10px;
+}

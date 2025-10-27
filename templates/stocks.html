@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Stock Viewer</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="stocks-page">
+
+    <!-- ✅ Top-right home link -->
+    <div class="top-right">
+        <a href="/">Home</a>
+    </div>
+
+    <div class="container">
+        <h1>View Stock Data</h1>
+
+        <form method="POST">
+            <label for="ticker">Select Companies:</label><br>
+            <select id="ticker" name="ticker" class="styled-select">
+                {% for t in companies %}
+                    <option value="{{ t }}" {% if t in selected_tickers %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <!-- 🔽 Month selector dropdown -->
+            <label for="months">Select Duration (in Months):</label><br>
+            <select id="months" name="months" class="styled-select">
+                <option value="1" {% if selected_months == '1' %}selected{% endif %}>1 Month</option>
+                <option value="3" {% if selected_months == '3' %}selected{% endif %}>3 Months</option>
+                <option value="6" {% if selected_months == '6' %}selected{% endif %}>6 Months</option>
+                <option value="12" {% if selected_months == '12' %}selected{% endif %}>12 Months</option>
+            </select><br><br>
+
+            <input type="submit" value="Show Stocks" />
+        </form>
+
+        {% for stock in stocks_data %}
+            <div class="chart">
+                <h2>{{ stock.ticker }}</h2>
+                <div id="chart-{{ loop.index0 }}" style="height: 400px;"></div>
+
+                <script>
+                    const dates{{ loop.index0 }} = {{ stock.data | tojson }};
+                    const x{{ loop.index0 }} = dates{{ loop.index0 }}.map(item => item.Date);
+                    const y{{ loop.index0 }} = dates{{ loop.index0 }}.map(item => item.Close);
+
+                    Plotly.newPlot('chart-{{ loop.index0 }}', [{
+                        x: x{{ loop.index0 }},
+                        y: y{{ loop.index0 }},
+                        mode: 'lines+markers',
+                        name: '{{ stock.ticker }}',
+                        line: {
+                            color: '#1f77b4',
+                            width: 2,
+                            shape: 'spline'
+                        },
+                        marker: {
+                            size: 4,
+                            color: '#1f77b4'
+                        }
+                    }], {
+                        title: '{{ stock.ticker }} - Last {{ selected_months }} Month(s)',
+                        xaxis: {
+                            title: 'Date',
+                            showgrid: true,
+                            gridcolor: '#e0e0e0'
+                        },
+                        yaxis: {
+                            title: 'Price (₹)',
+                            showgrid: true,
+                            gridcolor: '#e0e0e0'
+                        },
+                        hovermode: 'x unified',
+                        plot_bgcolor: 'rgba(0,0,0,0)',
+                        paper_bgcolor: 'rgba(0,0,0,0)'
+                    });
+                </script>
+
+                <h4>Company Info:</h4>
+                <p><strong>Name:</strong> {{ infos[stock.ticker].get('longName', 'N/A') }}</p>
+                <p><strong>Sector:</strong> {{ infos[stock.ticker].get('sector', 'N/A') }}</p>
+                <p><strong>Market Cap:</strong> {{ infos[stock.ticker].get('marketCap', 'N/A') }}</p>
+                <p><strong>52 Week High / Low:</strong> {{ infos[stock.ticker].get('fiftyTwoWeekHigh', 'N/A') }} / {{ infos[stock.ticker].get('fiftyTwoWeekLow', 'N/A') }}</p>
+                <p><strong>Summary:</strong> {{ infos[stock.ticker].get('longBusinessSummary', 'N/A') }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

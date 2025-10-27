@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Finance Pulse - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page">
+    <!-- ✅ Chatbot link at top-right -->
+    <a href="/chatbot" style="position: absolute; top: 20px; right: 30px; color: #00ff88; text-decoration: none; font-weight: bold; background: rgba(0, 0, 0, 0.6); padding: 10px 20px; border-radius: 25px; backdrop-filter: blur(15px); border: 2px solid rgba(0, 255, 136, 0.4); transition: all 0.3s ease; z-index: 10; text-shadow: 2px 2px 4px rgba(0,0,0,0.9), 0 0 10px rgba(0,255,136,0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">🤖 Chatbot</a>
+
+    <h1 class="title">Fin_Pulse</h1>
+    <nav class="nav-vertical">
+        <a href="/">Home</a>
+        <a href="/stocks">Stocks</a>
+        <a href="/news">Market News/Sentiments</a>
+        <a href="/Visualisation">Market News/Sentiments Graphs</a>
+    </nav>
+
+    <p class="description">
+        This platform provides real-time stock data, latest market news, and financial sentiment insights to help you make informed investment decisions.
+    </p>
+</body>
+</html>
