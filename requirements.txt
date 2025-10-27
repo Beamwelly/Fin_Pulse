@@ -2,3 +2,4 @@ flask
 yfinance
 requests
 textblob
+python-dotenv
